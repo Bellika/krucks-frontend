@@ -1,33 +1,34 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useEffect, useState } from 'react'
+import { Note } from './models/note';
 import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
+  const [notes, setNotes] = useState<Note[]>([]);
+
+  useEffect(() => {
+    async function loadNotes () {
+      try {
+        const response = await fetch("http://localhost:5000/api/notes", { method: "GET", headers: { 'Content-Type': 'application/json' } })
+        const notes = await response.json();
+        console.log(notes)
+        setNotes(notes);
+      } catch (error) {
+        console.error(error)
+      }
+    }
+      loadNotes();
+  }, []);
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
+      <h1>Krucks</h1>
+      {JSON.stringify(notes)}
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
         </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }
