@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
-import { Note } from './models/note';
-import './App.css'
+import { Note as NoteModel} from './models/note';
+import Note from './components/Note';
 
 function App() {
   const [count, setCount] = useState(0)
-  const [notes, setNotes] = useState<Note[]>([]);
+  const [notes, setNotes] = useState<NoteModel[]>([]);
 
   useEffect(() => {
     async function loadNotes () {
@@ -23,7 +23,9 @@ function App() {
   return (
     <>
       <h1>Krucks</h1>
-      {JSON.stringify(notes)}
+      {notes.map(note => (
+        <Note note={note} key={note._id}/>
+      ))}
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
