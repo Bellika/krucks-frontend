@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react'
 import { Note as NoteModel} from './models/note';
 import Note from './components/Note';
+import * as NotesApi from "./network/notes_api";
+import AddNoteDialog from './components/AddNoteDialog';
 
 function App() {
-  const [count, setCount] = useState(0)
   const [notes, setNotes] = useState<NoteModel[]>([]);
+  const [showAddNoteDialog, setShowAddNoteDialog] = useState(false);
 
   useEffect(() => {
     async function loadNotes () {
       try {
-        const response = await fetch("http://localhost:5000/api/notes", { method: "GET", headers: { 'Content-Type': 'application/json' } })
-        const notes = await response.json();
-        console.log(notes)
+        const notes = await NotesApi.fetchNotes();
         setNotes(notes);
       } catch (error) {
         console.error(error)
@@ -20,17 +20,31 @@ function App() {
       loadNotes();
   }, []);
 
+  const handleCloseAddNoteDialog = () => {
+    setShowAddNoteDialog(false);
+  }
+
   return (
     <>
       <h1>Krucks</h1>
+
+      <button onClick={() => setShowAddNoteDialog(true)}>
+        Add new note
+      </button>
+
       {notes.map(note => (
         <Note note={note} key={note._id}/>
       ))}
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-      </div>
+      
+      { showAddNoteDialog &&
+          <AddNoteDialog 
+          onClose={handleCloseAddNoteDialog}
+          onNoteSaved={(newNote) => {
+            setNotes([...notes, newNote]);
+            setShowAddNoteDialog(false);
+          }}
+          />
+      }
     </>
   )
 }
