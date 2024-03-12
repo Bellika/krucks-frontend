@@ -3,9 +3,10 @@ import { Note as NoteModel } from "../models/note";
 
 interface NoteProps {
     note: NoteModel,
+    onDeleteNoteClicked: (note: NoteModel) => void,
 }
 
-const Note = ({ note }: NoteProps) => {
+const Note = ({ note, onDeleteNoteClicked }: NoteProps) => {
     const {
         title,
         text,
@@ -16,6 +17,10 @@ const Note = ({ note }: NoteProps) => {
             <div>{title}</div>
             <br/>
             <div className={styles.cardText}>{text}</div>
+            <button onClick={(e) => {
+                onDeleteNoteClicked(note);
+                e.stopPropagation();
+                }}>Delete</button>
         </div>
     )
 }

@@ -24,6 +24,15 @@ function App() {
     setShowAddNoteDialog(false);
   }
 
+  async function deleteNote(note: NoteModel) {
+    try {
+      await NotesApi.deleteNote(note._id);
+      setNotes(notes.filter(existingNote => existingNote._id !== note._id));
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <>
       <h1>Krucks</h1>
@@ -33,7 +42,11 @@ function App() {
       </button>
 
       {notes.map(note => (
-        <Note note={note} key={note._id}/>
+        <Note 
+        note={note} 
+        key={note._id}
+        onDeleteNoteClicked={deleteNote}
+        />
       ))}
       
       { showAddNoteDialog &&
