@@ -3,29 +3,41 @@ import { NoteInput } from "../network/notes_api";
 import { Note } from "../models/note";
 import * as NotesApi from "../network/notes_api";
 
-interface AddNoteDialogProps {
-    onClose: () => void;
+interface AddEditNoteDialogProps {
+    noteToEdit?: Note, 
+    onClose: () => void, 
     onNoteSaved: (note: Note) => void,
 }
 
-const AddNoteDialog = ({ onClose, onNoteSaved }: AddNoteDialogProps) => {
+const AddEditNoteDialog = ({ noteToEdit, onClose, onNoteSaved }: AddEditNoteDialogProps) => {
 
-    const { register, handleSubmit, formState : {isSubmitting} } = useForm<NoteInput>();
+    const { register, handleSubmit, formState : {isSubmitting} } = useForm<NoteInput>({
+        defaultValues: {
+            title: noteToEdit?.title || "",
+            text: noteToEdit?.text || "",
+        }
+    });
     
     async function onSubmit(input: NoteInput) {
         try {
-            const noteResponse = await NotesApi.createNote(input)
+            let noteResponse: Note;
+            if (noteToEdit) {
+                noteResponse = await NotesApi.updateNote(noteToEdit._id, input);
+            } else {
+                noteResponse = await NotesApi.createNote(input);
+            }
             onNoteSaved(noteResponse);
         } catch (error) {
-            console.log(error);
+            console.error(error);
+            alert(error);
         }
     }
 
     return (
         <div>
-            <h1>Add Note</h1>
+            <h1>{noteToEdit ? "Edit note" : "Add note"}</h1>
 
-            <form id="addNoteForm" onSubmit={handleSubmit(onSubmit)}>
+            <form id="addEditNoteForm" onSubmit={handleSubmit(onSubmit)}>
                 <input
                     type="text"
                     placeholder="Title"
@@ -40,7 +52,7 @@ const AddNoteDialog = ({ onClose, onNoteSaved }: AddNoteDialogProps) => {
             </form>
             <button
                 type="submit"
-                form="addNoteForm"
+                form="addEditNoteForm"
                 disabled={isSubmitting}
             >
                 Save
@@ -50,4 +62,4 @@ const AddNoteDialog = ({ onClose, onNoteSaved }: AddNoteDialogProps) => {
     )
 }
 
-export default AddNoteDialog
+export default AddEditNoteDialog

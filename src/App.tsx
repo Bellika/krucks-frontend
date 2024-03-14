@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react'
 import { Note as NoteModel} from './models/note';
 import Note from './components/Note';
 import * as NotesApi from "./network/notes_api";
-import AddNoteDialog from './components/AddNoteDialog';
+import AddNoteDialog from './components/AddEditNoteDialog';
 
 function App() {
   const [notes, setNotes] = useState<NoteModel[]>([]);
   const [showAddNoteDialog, setShowAddNoteDialog] = useState(false);
-
+  const [noteToEdit, setNoteToEdit] = useState<NoteModel|null>(null);
   useEffect(() => {
     async function loadNotes () {
       try {
@@ -46,6 +46,7 @@ function App() {
         note={note} 
         key={note._id}
         onDeleteNoteClicked={deleteNote}
+        onNoteClicked={setNoteToEdit}
         />
       ))}
       
@@ -57,6 +58,16 @@ function App() {
             setShowAddNoteDialog(false);
           }}
           />
+      }
+      { noteToEdit && 
+        <AddNoteDialog
+        noteToEdit={noteToEdit}
+        onClose={() => setNoteToEdit(null)}
+        onNoteSaved={(updateNote) => {
+          setNotes(notes.map(existingNote => existingNote._id === updateNote._id ? updateNote : existingNote));
+          setNoteToEdit(null);
+        }}
+        />
       }
     </>
   )

@@ -3,17 +3,21 @@ import { Note as NoteModel } from "../models/note";
 
 interface NoteProps {
     note: NoteModel,
+    onNoteClicked: (note: NoteModel) => void,
     onDeleteNoteClicked: (note: NoteModel) => void,
 }
 
-const Note = ({ note, onDeleteNoteClicked }: NoteProps) => {
+const Note = ({ note, onNoteClicked, onDeleteNoteClicked }: NoteProps) => {
     const {
         title,
         text,
     } = note;
 
     return(
-        <div className={styles.noteCard}>
+        <div 
+        className={styles.noteCard}
+        onClick={() => onNoteClicked(note)}
+        >
             <div>{title}</div>
             <br/>
             <div className={styles.cardText}>{text}</div>
