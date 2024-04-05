@@ -1,72 +1,71 @@
-import { useEffect, useState } from 'react'
-import { Note as NoteModel} from './models/note';
-import Note from './components/Note';
-import * as NotesApi from "./network/notes_api";
-import AddNoteDialog from './components/AddEditNoteDialog';
+import SignUpModal from './components/SignUpModal';
+import LoginModal from './components/LoginModal';
+import NavBar from './components/NavBar';
+import { useState, useEffect } from 'react';
+import { User } from './models/user';
+import * as UsersApi from "./network/users_api";
+import NotesPageLoggedIn from './components/NotesPageLoggedIn';
+import NotesPageLoggedOut from './components/NotesPageLoggedOut';
 
 function App() {
-  const [notes, setNotes] = useState<NoteModel[]>([]);
-  const [showAddNoteDialog, setShowAddNoteDialog] = useState(false);
-  const [noteToEdit, setNoteToEdit] = useState<NoteModel|null>(null);
+
+  const [loggedInUser, setLoggedInUser] = useState<User|null>(null);
+  const [showSignUpModal, setShowSignUpModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
   useEffect(() => {
-    async function loadNotes () {
+    async function fetchLoggedInUser() {
       try {
-        const notes = await NotesApi.fetchNotes();
-        setNotes(notes);
+        const user = await UsersApi.getLoggedInUser();
+        setLoggedInUser(user);
       } catch (error) {
-        console.error(error)
+        console.log(error);
       }
     }
-      loadNotes();
-  }, []);
+    fetchLoggedInUser();
+  }, [])
 
-  const handleCloseAddNoteDialog = () => {
-    setShowAddNoteDialog(false);
+  const handleCloseSignUpModal = () => {
+    setShowSignUpModal(false);
   }
 
-  async function deleteNote(note: NoteModel) {
-    try {
-      await NotesApi.deleteNote(note._id);
-      setNotes(notes.filter(existingNote => existingNote._id !== note._id));
-    } catch (error) {
-      console.error(error);
-    }
+  const handleCloseLoginModal = () => {
+    setShowLoginModal(false);
   }
 
   return (
     <>
       <h1>Krucks</h1>
 
-      <button onClick={() => setShowAddNoteDialog(true)}>
-        Add new note
-      </button>
+      <NavBar
+        loggedInUser={loggedInUser}
+        onLoginClicked={() => setShowLoginModal(true)}
+        onSignUpClicked={() => setShowSignUpModal(true)}
+        onLogoutSuccessful={() => setLoggedInUser(null)}
+      />
 
-      {notes.map(note => (
-        <Note 
-        note={note} 
-        key={note._id}
-        onDeleteNoteClicked={deleteNote}
-        onNoteClicked={setNoteToEdit}
-        />
-      ))}
-      
-      { showAddNoteDialog &&
-          <AddNoteDialog 
-          onClose={handleCloseAddNoteDialog}
-          onNoteSaved={(newNote) => {
-            setNotes([...notes, newNote]);
-            setShowAddNoteDialog(false);
-          }}
-          />
+      {loggedInUser
+        ? <NotesPageLoggedIn />
+        : <NotesPageLoggedOut />
       }
-      { noteToEdit && 
-        <AddNoteDialog
-        noteToEdit={noteToEdit}
-        onClose={() => setNoteToEdit(null)}
-        onNoteSaved={(updateNote) => {
-          setNotes(notes.map(existingNote => existingNote._id === updateNote._id ? updateNote : existingNote));
-          setNoteToEdit(null);
-        }}
+
+      {showSignUpModal &&
+        <SignUpModal
+          onClose={() => handleCloseSignUpModal()}
+          onSignUpSuccessful={(user) => {
+          setLoggedInUser(user);
+          setShowSignUpModal(false);         
+          }}
+        />
+      }
+
+      {showLoginModal &&
+        <LoginModal
+          onClose={() => handleCloseLoginModal()}
+          onLoginSuccessful={(user) => {
+          setLoggedInUser(user);
+          setShowLoginModal(false);
+          }}
         />
       }
     </>
