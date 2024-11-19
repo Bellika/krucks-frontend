@@ -1,11 +1,11 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import CragList from './components/CragList'
+import CragPage from './pages/CragPage'
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path='/' element={<CragList />} />
+        <Route path='/' element={<CragPage />} />
       </Routes>
     </Router>
   )
