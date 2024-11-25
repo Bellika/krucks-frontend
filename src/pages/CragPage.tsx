@@ -6,8 +6,8 @@ const CragPage: React.FC = () => {
   return (
     <div>
       <h1>Crags</h1>
-      <CreateCragForm />
       <CragList />
+      <CreateCragForm />
     </div>
   )
 }
