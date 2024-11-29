@@ -1,8 +1,9 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import { AuthProvider } from './context/AuthContext'
 import 'leaflet/dist/leaflet.css'
 import CragPage from './pages/CragPage'
 import LandingPage from './pages/LandingPage'
-import { AuthProvider } from './context/AuthContext'
+import CreateCragPage from './pages/CreateCragPage'
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <Routes>
         <Route path='/' element={<LandingPage />} />
         <Route path='/crags' element={<CragPage />} />
+        <Route path='/create-crag' element={<CreateCragPage />} />
       </Routes>
     </Router>
     </AuthProvider>
