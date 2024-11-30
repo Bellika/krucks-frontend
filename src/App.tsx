@@ -4,6 +4,7 @@ import 'leaflet/dist/leaflet.css'
 import CragPage from './pages/CragPage'
 import LandingPage from './pages/LandingPage'
 import CreateCragPage from './pages/CreateCragPage'
+import CragDetailsPage from './pages/CragDetailsPage'
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Routes>
         <Route path='/' element={<LandingPage />} />
         <Route path='/crags' element={<CragPage />} />
+        <Route path='/crag/:id' element={<CragDetailsPage />} />
         <Route path='/create-crag' element={<CreateCragPage />} />
       </Routes>
     </Router>

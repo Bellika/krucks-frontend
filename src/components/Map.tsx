@@ -1,8 +1,9 @@
 import React from "react"
 import { MapContainer, TileLayer, Marker, useMapEvents, Popup } from "react-leaflet"
+import { Link } from "react-router-dom";
 interface MapProps {
   onMapClick?: (latlng: { lat: number; lng: number }) => void
-  markers?: { lat: number; lng: number; popupContent?: string }[]
+  markers?: { crag: { _id: string; name: string }; lat: number; lng: number; popupContent?: string }[]
   center?: [number, number]
   zoom?: number
 }
@@ -35,7 +36,7 @@ const Map: React.FC<MapProps> = ({
         />
         {markers.map((marker, idx) => (
           <Marker key={idx} position={[marker.lat, marker.lng]}>
-            {marker.popupContent && <Popup>{marker.popupContent}</Popup>}
+            {marker.popupContent && <Popup><Link to={`/crag/${marker.crag._id}`}>{marker.popupContent}</Link></Popup>}
           </Marker>
         ))}
         {onMapClick && <ClickHandler />}

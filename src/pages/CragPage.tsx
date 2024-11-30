@@ -4,6 +4,7 @@ import { getCrags } from "../api/cragApi";
 import CragList from "../components/CragList"
 import Map from "../components/Map"
 interface Crag {
+  _id: string,
   name: string;
   latitude: number,
   longitude: number,
@@ -28,11 +29,12 @@ const CragPage: React.FC = () => {
     }
 
     fetchCrags()
-  })
+  }, [])
 
   const markers = crags
   .filter((crag) => crag.latitude !== undefined && crag.longitude !== undefined)
   .map((crag) => ({
+    crag,
     lat: crag.latitude,
     lng: crag.longitude,
     popupContent: crag.name,
