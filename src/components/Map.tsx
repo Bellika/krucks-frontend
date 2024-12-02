@@ -35,7 +35,7 @@ const Map: React.FC<MapProps> = ({
           attribution='&copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         />
         {markers.map((marker, idx) => (
-          <Marker key={idx} position={[marker.lat, marker.lng]}>
+          <Marker key={idx} position={[marker.lng, marker.lat]}>
             {marker.popupContent && <Popup><Link to={`/crag/${marker.crag._id}`}>{marker.popupContent}</Link></Popup>}
           </Marker>
         ))}

@@ -6,8 +6,10 @@ import Map from "../components/Map"
 interface Crag {
   _id: string,
   name: string;
-  latitude: number,
-  longitude: number,
+  location: {
+    type: string,
+    coordinates: [number, number]
+  }
 }
 
 const CragPage: React.FC = () => {
@@ -32,11 +34,11 @@ const CragPage: React.FC = () => {
   }, [])
 
   const markers = crags
-  .filter((crag) => crag.latitude !== undefined && crag.longitude !== undefined)
+  .filter((crag) => crag.location?.coordinates?.length === 2)
   .map((crag) => ({
     crag,
-    lat: crag.latitude,
-    lng: crag.longitude,
+    lat: crag.location.coordinates[0],
+    lng: crag.location.coordinates[1],
     popupContent: crag.name,
   }))
 

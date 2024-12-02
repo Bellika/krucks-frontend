@@ -18,12 +18,14 @@ const CreateCragForm: React.FC<CreateCragFormProps> = ({ selectedCoordinates }) 
     }
 
     try {
-      await axios.post('http://localhost:5000/api/crags', {
+      const payload = {
         name,
         description,
-        latitude: selectedCoordinates.lat,
-        longitude: selectedCoordinates.lng
-      })
+        lng: selectedCoordinates.lng,
+        lat: selectedCoordinates.lat,
+      }
+
+      await axios.post('http://localhost:5000/api/crags', payload)
       alert('Crag created!')
     } catch (error) {
       console.error('Error creating crag:', error)
