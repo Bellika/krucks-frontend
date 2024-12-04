@@ -9,11 +9,20 @@ const CreateCragPage: React.FC = () => {
     setSelectedCoordinates(latlng)
   }
 
+  const markers = selectedCoordinates
+    ? [{
+      crag: { _id: 'temp', name: 'New Crag' },
+      lat: selectedCoordinates.lng,
+      lng: selectedCoordinates.lat,
+      popupContent: 'Click to create a new crag'
+    }]
+    : []
+
   return (
     <div>
       <h1>Create a Crag</h1>
       <Map 
-        markers={selectedCoordinates ? [selectedCoordinates] : []}
+        markers={markers}
         onMapClick={handleMapClick}
       />
       <CreateCragForm selectedCoordinates={selectedCoordinates}/>
