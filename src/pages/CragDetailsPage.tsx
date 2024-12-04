@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getCragById } from "../api/cragApi"; 
 import CragDetails from "../components/CragDetails"; 
+import BouldersMap from "../components/BouldersMap";
 
 interface Crag {
   _id: string;
@@ -56,6 +57,7 @@ const CragDetailsPage: React.FC = () => {
         latitude={crag.latitude}
         longitude={crag.longitude}
       />
+      <BouldersMap cragId={crag._id}/>
     </div>
   );
 };

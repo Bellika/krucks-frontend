@@ -6,7 +6,6 @@ interface CragDetailsProps {
   latitude: number;
   longitude: number;
 }
-
 const CragDetails: React.FC<CragDetailsProps> = ({
   name,
   description,
