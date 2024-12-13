@@ -1,12 +1,12 @@
 import React from "react";
 
-interface CragDetailsProps {
+interface CragProps {
   name: string;
   description: string;
   latitude: number;
   longitude: number;
 }
-const CragDetails: React.FC<CragDetailsProps> = ({
+const Crag: React.FC<CragProps> = ({
   name,
   description,
   latitude,
@@ -22,4 +22,4 @@ const CragDetails: React.FC<CragDetailsProps> = ({
   );
 };
 
-export default CragDetails;
+export default Crag;

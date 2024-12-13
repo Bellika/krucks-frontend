@@ -33,7 +33,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = async (email: string, password: string) => {
     const res = await axiosInstance.post('/auth/login', { email, password }, { withCredentials: true })
     setUser(res.data.user)
-    console.log(email, password)
   }
 
   const logout = async () => {
