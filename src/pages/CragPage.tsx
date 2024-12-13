@@ -9,8 +9,10 @@ interface Crag {
   name: string;
   description: string;
   images: string[];
-  latitude: number;
-  longitude: number;
+  location: { 
+    type: string,
+    coordinates: [number, number] 
+  }
 }
 
 const CragPage: React.FC = () => {
@@ -54,8 +56,8 @@ const CragPage: React.FC = () => {
       <Crag
         name={crag.name}
         description={crag.description}
-        latitude={crag.latitude}
-        longitude={crag.longitude}
+        latitude={crag.location.coordinates[0]}
+        longitude={crag.location.coordinates[1]}
       />
       <BouldersMap cragId={crag._id}/>
     </div>
